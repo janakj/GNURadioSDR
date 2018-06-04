@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>nbfm_receiver</value>
+      <value>nbfm_receive</value>
     </param>
     <param>
       <key>max_nouts</key>

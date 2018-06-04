@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>fm_tx_2</value>
+      <value>wbfm_transmit</value>
     </param>
     <param>
       <key>max_nouts</key>
