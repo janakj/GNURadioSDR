@@ -81,7 +81,7 @@ class wbfm_transmit(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._freq_range = Range(87.7e6, 107.7e6, 200e3, 87.7e6, 200)
+        self._freq_range = Range(87.7e6, 107.7e6, 200e3, args.frequency, 200)
         self._freq_win = RangeWidget(self._freq_range, self.set_freq, "freq", "counter_slider", float)
         self.top_grid_layout.addWidget(self._freq_win)
         self.vocoder_cvsd_encode_fb_0 = vocoder.cvsd_encode_fb(8,0.5)
