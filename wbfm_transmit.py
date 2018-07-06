@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wbfm Transmit
-# Generated: Fri Jul  6 12:34:23 2018
+# Generated: Fri Jul  6 14:53:44 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -18,7 +18,6 @@ if __name__ == '__main__':
 
 from PyQt4 import Qt
 from gnuradio import analog
-from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import eng_notation
@@ -67,10 +66,6 @@ class wbfm_transmit(gr.top_block, Qt.QWidget):
         self.settings = Qt.QSettings("GNU Radio", "wbfm_transmit")
         self.restoreGeometry(self.settings.value("geometry").toByteArray())
 
-	
-
-	
-
 
         ##################################################
         # Variables
@@ -107,8 +102,8 @@ class wbfm_transmit(gr.top_block, Qt.QWidget):
         	verbose=False,
         	log=False,
         )
+        self.blocks_wavfile_source_0 = blocks.wavfile_source("/home/irt/Downloads/Looking Glass - Brandy (You're a Fine Girl) (Audio).wav", True)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
-        self.audio_source_0 = audio.source(48000, '', True)
         self.analog_sig_source_x_0 = analog.sig_source_c(500e3, analog.GR_COS_WAVE, 0, 142.857e-3, 0)
 
 
@@ -117,8 +112,8 @@ class wbfm_transmit(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
-        self.connect((self.audio_source_0, 0), (self.vocoder_cvsd_encode_fb_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.osmosdr_sink_0, 0))
+        self.connect((self.blocks_wavfile_source_0, 0), (self.vocoder_cvsd_encode_fb_0, 0))
         self.connect((self.digital_gmsk_mod_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.vocoder_cvsd_encode_fb_0, 0), (self.digital_gmsk_mod_0, 0))
