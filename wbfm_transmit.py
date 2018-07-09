@@ -148,7 +148,7 @@ def main(top_block_cls=wbfm_transmit, options=None):
 
     tb = top_block_cls()
     tb.start()
-    tb.show()
+    #tb.show()
 
     def quitting():
         tb.stop()
