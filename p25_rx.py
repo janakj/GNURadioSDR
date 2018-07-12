@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: P25 Rx
-# Generated: Mon Jul  9 11:56:10 2018
+# Generated: Thu Jul 12 12:01:55 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -183,7 +183,7 @@ class p25_rx(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.low_pass_filter_0 = filter.interp_fir_filter_ccf(2, firdes.low_pass(
+        self.low_pass_filter_0 = filter.fir_filter_ccf(125, firdes.low_pass(
         	1, samp_rate, 12500, 1000, firdes.WIN_HAMMING, 6.76))
         self.digital_hdlc_deframer_bp_0 = digital.hdlc_deframer_bp(32, 500)
         self.digital_gfsk_demod_0 = digital.gfsk_demod(
