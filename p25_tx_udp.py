@@ -26,12 +26,13 @@ class p25_tx_udp(gr.top_block):
 
 
     def create_connections(self):
-        self.connect((self.wav_source, 0), (self.throttle, 0))
-        self.connect((self.throttle, 0), (self.float_to_short, 0))
-        self.connect((self.float_to_short, 0), (self.codec2_encode, 0))
-        self.connect((self.codec2_encode, 0), (self.vector_to_stream, 0))
-        self.connect((self.vector_to_stream, 0), (self.stream_tagger, 0))
-        self.connect((self.stream_tagger, 0), (self.tagged_stream_to_pdu, 0))
+        self.connect(self.wav_source,
+                     self.throttle,
+                     self.float_to_short,
+                     self.codec2_encode,
+                     self.vector_to_stream,
+                     self.stream_tagger,
+                     self.tagged_stream_to_pdu)
         self.msg_connect((self.tagged_stream_to_pdu, 'pdus'), (self.socket_pdu, 'pdus'))
 
 

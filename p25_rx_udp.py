@@ -25,10 +25,11 @@ class p25_rx_udp(gr.top_block):
 
     def create_connections(self):
         self.msg_connect((self.socket_pdu, 'pdus'), (self.pdu_to_tagged_stream, 'pdus'))
-        self.connect((self.pdu_to_tagged_stream, 0), (self.stream_to_vector, 0))
-        self.connect((self.stream_to_vector, 0), (self.codec2_decode, 0))
-        self.connect((self.codec2_decode, 0), (self.short_to_float, 0))
-        self.connect((self.short_to_float, 0), (self.audio_sink, 0))
+        self.connect(self.pdu_to_tagged_stream,
+                     self.stream_to_vector,
+                     self.codec2_decode,
+                     self.short_to_float,
+                     self.audio_sink)
 
 
     def __init__(self, port):
