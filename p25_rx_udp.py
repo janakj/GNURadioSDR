@@ -9,23 +9,37 @@ from gnuradio import blocks
 from gnuradio import audio
 from gnuradio import vocoder
 
-from p25_config import DEFAULT_PORT, PACKET_SIZE, CODEC2_MODE, SAMPLE_SCALE, SAMPLE_RATE
+from p25_config import DEFAULT_PORT, CODEC2_MODE, CODEC2_BITS_PER_FRAME, DYNAMIC_RANGE, SAMPLE_RATE
 
 
 class p25_rx_udp(gr.top_block):
 
     def create_blocks(self):
         self.socket_pdu = blocks.socket_pdu("UDP_SERVER", '0.0.0.0', self.port, 10000, False)
+
+        # ConvertUDP datagrams into a stream of tagged value, each
+        # value will contain the contents of the UDP datagram. The
+        # contents of the datagram is one packed CODEC2 frame.
         self.pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, 'packet_len')
-        self.stream_to_vector = blocks.stream_to_vector(gr.sizeof_char * 1, PACKET_SIZE)
+
+        # Unpack the 8 bytes (one codec2 frame) into a stream of bits
+        self.unpacker = blocks.packed_to_unpacked_bb(1, gr.GR_LSB_FIRST)
+
+        # Convert the stream of bits into a vector of bits, which is
+        # what the CODEC2 encoder expects, and decode the frame.
+        self.stream_to_vector = blocks.stream_to_vector(gr.sizeof_char, CODEC2_BITS_PER_FRAME)
         self.codec2_decode = vocoder.codec2_decode_ps(CODEC2_MODE)
-        self.short_to_float = blocks.short_to_float(1, SAMPLE_SCALE)
+
+        # Scale the dynamic range of the stream back to [-1, 1] and
+        # feed it to the soundcard.
+        self.short_to_float = blocks.short_to_float(1, DYNAMIC_RANGE)
         self.audio_sink = audio.sink(SAMPLE_RATE, '', True)
 
 
     def create_connections(self):
         self.msg_connect((self.socket_pdu, 'pdus'), (self.pdu_to_tagged_stream, 'pdus'))
         self.connect(self.pdu_to_tagged_stream,
+                     self.unpacker,
                      self.stream_to_vector,
                      self.codec2_decode,
                      self.short_to_float,
