@@ -1,47 +1,31 @@
 #!/usr/bin/env python2
+from __future__ import print_function
 
-from gnuradio import blocks
-from gnuradio import eng_notation
-from gnuradio import gr
-from gnuradio import vocoder
-from gnuradio.eng_option import eng_option
-from gnuradio.filter import firdes
-from gnuradio.vocoder import codec2
-from optparse import OptionParser
+import os
 import sys
 import argparse
+import logging
 
-#Arguments: ip address and port for UDP client
-parser = argparse.ArgumentParser(description='Host ip and port')
-parser.add_argument('-ip', dest = 'ip', default = '192.168.1.214', nargs = '?', help = 'host ip address')
-parser.add_argument('-p', dest = 'port', default = '10500', nargs = '?', help = 'port for UDP client')
-args = parser.parse_args()
+from gnuradio import gr
+from gnuradio import blocks
+from gnuradio import vocoder
+
+from p25_config import DEFAULT_PORT, PACKET_SIZE, CODEC2_MODE, SAMPLE_SCALE, SAMPLE_RATE
 
 
 class p25_tx_udp(gr.top_block):
-    def __init__(self):
-        gr.top_block.__init__(self)
-        ###########
-        #VARIABLES#
-        ###########
-        self.port = port = args.port
-        self.host_ip = host_ip = args.ip
-        
-        ########
-        #BLOCKS#
-        ########
-        self.wav_source = blocks.wavfile_source('/home/irt/Downloads/sentence2.wav', True)
-        self.throttle = blocks.throttle(gr.sizeof_float*1, 8000,True)
-        self.float_to_short = blocks.float_to_short(1, 32768)
-        self.codec2_encode = vocoder.codec2_encode_sp(codec2.MODE_3200)
-        self.vector_to_stream = blocks.vector_to_stream(gr.sizeof_char*1, 64)
+    def create_blocks(self):
+        self.wav_source = blocks.wavfile_source(self.wavfile, True)
+        self.throttle = blocks.throttle(gr.sizeof_float * 1, SAMPLE_RATE, True)
+        self.float_to_short = blocks.float_to_short(1, SAMPLE_SCALE)
+        self.codec2_encode = vocoder.codec2_encode_sp(CODEC2_MODE)
+        self.vector_to_stream = blocks.vector_to_stream(gr.sizeof_char * 1, PACKET_SIZE)
         self.stream_tagger = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 64, "packet_len")
         self.tagged_stream_to_pdu = blocks.tagged_stream_to_pdu(blocks.byte_t, 'packet_len')
-        self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", host_ip, port, 10000, False)
-        
-        #############
-        #CONNECTIONS#
-        #############        
+        self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", self.ip, self.port, 10000, False)
+
+
+    def create_connections(self):
         self.connect((self.wav_source, 0), (self.throttle, 0))
         self.connect((self.throttle, 0), (self.float_to_short, 0))
         self.connect((self.float_to_short, 0), (self.codec2_encode, 0))
@@ -50,8 +34,34 @@ class p25_tx_udp(gr.top_block):
         self.connect((self.stream_tagger, 0), (self.tagged_stream_to_pdu, 0))
         self.msg_connect((self.tagged_stream_to_pdu, 'pdus'), (self.socket_pdu, 'pdus'))
 
+
+    def __init__(self, ip, port, wavfile):
+        gr.top_block.__init__(self)
+        self.ip = ip
+        self.port = port
+        self.wavfile = wavfile
+
+        self.create_blocks()
+        self.create_connections()
+
+
+
+def main():
+    #Arguments: ip address and port for UDP client
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', dest = 'ip', default = '127.0.0.1', nargs = '?', help = 'Receiver IP address')
+    parser.add_argument('-p', dest = 'port', default = DEFAULT_PORT, nargs = '?', help = 'Receiver UDP port')
+    parser.add_argument('-f', dest='wavfile', default='%s/Downloads/sentence2.wav' % os.environ['HOME'], nargs='?', help='WAV file')
+    args = parser.parse_args()
+
+    print("Transmitting file %s" % args.wavfile)
+    print("Streaming to udp:%s:%s" % (args.ip, args.port))
+
+    p25_tx_udp(args.ip, args.port, args.wavfile).run()
+
+
 if __name__ == '__main__':
     try:
-        p25_tx_udp().run()
+        main()
     except [[KeyboardInterrupt]]:
         pass
