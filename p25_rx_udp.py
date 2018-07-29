@@ -3,13 +3,17 @@ from __future__ import print_function
 
 import sys
 import argparse
+import numpy
 
 from gnuradio import gr
 from gnuradio import blocks
 from gnuradio import audio
 from gnuradio import vocoder
 
-from p25_config import DEFAULT_PORT, CODEC2_MODE, CODEC2_BITS_PER_FRAME, DYNAMIC_RANGE, SAMPLE_RATE
+from p25_config import DEFAULT_PORT, CODEC2_MODE, CODEC2_BITS_PER_FRAME, DYNAMIC_RANGE, SAMPLE_RATE, MTU
+import op25_repeater
+import op25
+import p25_demodulator
 
 
 class codec2_decoder(gr.hier_block2):
@@ -40,27 +44,40 @@ class codec2_decoder(gr.hier_block2):
 class p25_rx_udp(gr.top_block):
 
     def create_blocks(self):
-        self.socket_pdu = blocks.socket_pdu("UDP_SERVER", '0.0.0.0', self.port, 10000, False)
+        self.socket_pdu = blocks.socket_pdu("UDP_SERVER", '0.0.0.0', self.port, MTU, True)
+        self.pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.complex_t, 'packet_len')
 
-        # ConvertUDP datagrams into a stream of tagged value, each
-        # value will contain the contents of the UDP datagram. The
-        # contents of the datagram is one packed CODEC2 frame.
-        self.pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, 'packet_len')
+        self.c4fm_demod = p25_demodulator.p25_demod_cb(48000, demod_type='fsk4')
 
-        self.codec2_decoder = codec2_decoder()
+        self.decoder = op25_repeater.p25_frame_assembler(
+            "127.0.0.1",  # Wireshark host
+            0,            # Wireshark port
+            True,         # debug
+            True,         # do_imbe
+            True,         # do_output
+            False,        # do_msgq
+            self.msgq,    # msgq
+            True,         # do_audio_output
+            False)        # do_phase2_tdma
 
+        # Scale the dynamic range of the stream back to [-1, 1] and
+        # feed it to the soundcard.
+        self.short_to_float = blocks.short_to_float(1, DYNAMIC_RANGE)
         self.audio_sink = audio.sink(SAMPLE_RATE, '', True)
 
 
     def create_connections(self):
         self.msg_connect((self.socket_pdu, 'pdus'), (self.pdu_to_tagged_stream, 'pdus'))
         self.connect(self.pdu_to_tagged_stream,
-                     self.codec2_decoder,
+                     self.c4fm_demod,
+                     self.decoder,
+                     self.short_to_float,
                      self.audio_sink)
 
 
     def __init__(self, port):
         gr.top_block.__init__(self)
+        self.msgq = gr.msg_queue(1)
         self.port = port
         self.create_blocks()
         self.create_connections()
