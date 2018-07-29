@@ -88,7 +88,7 @@ class p25_tx_udp(gr.top_block):
 
         # Convert a fixed number of symbols into a PDU and transmit
         # the PDU to the receiver via UDP.
-        self.stream_tagger = blocks.stream_to_tagged_stream(gr.sizeof_gr_complex, 1, 1024, "packet_len")
+        self.stream_tagger = blocks.stream_to_tagged_stream(gr.sizeof_gr_complex, 1, MTU / gr.sizeof_gr_complex, "packet_len")
         self.tagged_stream_to_pdu = blocks.tagged_stream_to_pdu(blocks.complex_t, 'packet_len')
         self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", self.ip, self.port, MTU, True)
 
