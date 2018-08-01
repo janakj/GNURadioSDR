@@ -83,7 +83,7 @@ class p25_tx(gr.top_block):
 
         # Produces float samples with values within [-1, 1]
         wav_source = blocks.wavfile_source(wavfile, True)
-        throttle = blocks.throttle(gr.sizeof_float * 1, SAMPLE_RATE, True)
+        throttle = blocks.throttle(gr.sizeof_float * 1, SAMPLE_RATE * 2, True)
 
         trx = p25.c4fm_transmitter_fc(48000)
 
@@ -96,7 +96,7 @@ class p25_tx(gr.top_block):
 
         self.connect(
             wav_source,
-#            throttle,
+            throttle,
             trx
         )
 
