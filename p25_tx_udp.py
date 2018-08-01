@@ -85,13 +85,13 @@ class p25_tx(gr.top_block):
         wav_source = blocks.wavfile_source(wavfile, True)
         throttle = blocks.throttle(gr.sizeof_float * 1, SAMPLE_RATE * 2, True)
 
-        trx = p25.c4fm_transmitter_fc(48000)
+        trx = p25.c4fm_transmitter_fc(1e6)
 
         # Convert a fixed number of symbols into a PDU and transmit
         # the PDU to the receiver via UDP.
         stream_tagger = blocks.stream_to_tagged_stream(gr.sizeof_gr_complex, 1, MTU / gr.sizeof_gr_complex, "packet_len")
         tagged_stream_to_pdu = blocks.tagged_stream_to_pdu(blocks.complex_t, 'packet_len')
-        socket_pdu = blocks.socket_pdu("UDP_CLIENT", ip, port, MTU, True)
+        socket_pdu = blocks.socket_pdu("TCP_CLIENT", ip, port, MTU, True)
         self.msg_connect((tagged_stream_to_pdu, 'pdus'), (socket_pdu, 'pdus'))
 
         self.connect(

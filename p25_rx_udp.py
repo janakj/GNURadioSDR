@@ -44,11 +44,11 @@ class p25_rx(gr.top_block):
     def __init__(self, port):
         gr.top_block.__init__(self)
 
-        socket_pdu = blocks.socket_pdu("UDP_SERVER", '0.0.0.0', port, MTU, True)
+        socket_pdu = blocks.socket_pdu("TCP_SERVER", '0.0.0.0', port, MTU, True)
         input = blocks.pdu_to_tagged_stream(blocks.complex_t, 'packet_len')
         self.msg_connect((socket_pdu, 'pdus'), (input, 'pdus'))
 
-        receiver = p25.c4fm_receiver_cf()
+        receiver = p25.c4fm_receiver_cf(1e6)
 
         audio_sink = audio.sink(SAMPLE_RATE, '', True)
 
