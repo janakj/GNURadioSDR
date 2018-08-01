@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Copyright 2005,2006,2007 Free Software Foundation, Inc.
 #
@@ -45,8 +46,11 @@ __all__ = [
     'c4fm_transmitter_fc',
     'c4fm_receiver_cf']
 
+SYMBOL_RATE = 4800
+IF_RATE = 48000
 
-def fm_modulator_fc(rate, max_deviation=12.5e3):
+
+def fm_modulator_fc(rate=IF_RATE, max_deviation=12.5e3):
     # The analog FM modulator expects an audio signal (stream of
     # floats) on its input and produces a complex baseband signal on
     # the output. The output signal can be mixed with a local
@@ -56,7 +60,7 @@ def fm_modulator_fc(rate, max_deviation=12.5e3):
     return analog.frequency_modulator_fc(sensitivity)
 
 
-def fm_demodulator_cf(rate, symbol_deviation=600.0):
+def fm_demodulator_cf(rate=IF_RATE, symbol_deviation=600.0):
     gain = rate / (2.0 * pi * symbol_deviation)
     return analog.quadrature_demod_cf(gain)
 
@@ -66,9 +70,9 @@ def transfer_function_rx():
     # Specs undefined above 2,880 Hz.  It would be nice to have a sharper
     # rolloff, but this filter is cheap enough....
     xfer = []	# frequency domain transfer function
-    for f in xrange(0, 4800):
+    for f in xrange(0, SYMBOL_RATE):
         # D(f)
-	t = pi * f / 4800
+	t = pi * f / SYMBOL_RATE
 	if t < 1e-6:
 	    df = 1.0
 	else:
@@ -80,18 +84,23 @@ def transfer_function_rx():
 def transfer_function_tx():
     xfer = []	# frequency domain transfer function
     for f in xrange(0, 2881):	# specs cover 0 - 2,880 Hz
-        # H(f)
+        # |H(f)| = magnitude response of the Nyquist Raised Cosine Filter
+        # |H(f)| = 1                          for |f| < 1920 Hz
+        # |H(f)| = 0.5 + 0.5cos(2 π f / 1920) for 1920Hz < |f| < 2880Hz
+        # |H(f)| = 0                          for |f| > 2880 Hz
+
 	if f < 1920:
 	    hf = 1.0
 	else:
 	    hf = 0.5 + 0.5 * cos (2 * pi * float(f) / 1920.0)
 
-	# P(f)
-	t = pi * f / 4800.0
+        # |P(f)| = magnitude response of the Shaping Filter
+        # |P(f)| = (π f / 4800) / sin(π f / 4800) for |f| < 2880 Hz
+	t = pi * f / float(SYMBOL_RATE)
 	if t < 1e-6:
 	    pf = 1
 	else:
-	    pf = t / sin (t)
+	    pf = t / sin(t)
 	# time domain convolution == frequency domain multiplication
 	xfer.append(pf * hf)
     return xfer
@@ -153,37 +162,47 @@ class arb_resampler_cc(gr.hier_block2):
 
 
 class c4fm_modulator_ff(gr.hier_block2):
-    def __init__(self, input_rate=4800, output_rate=48000):
-        """Hierarchical block for RRC-filtered P25 FM modulation.
+    def __init__(self, input_rate=SYMBOL_RATE, output_rate=IF_RATE):
+        """P25 pre-modulation (raised cosine filter and pulse shaping) block.
 
-	The input is a dibit (P25 symbol) stream (char, not packed)
-	and the output is the float "C4FM" signal at baseband,
-	suitable for application to an FM modulator stage
+        This hierarchical block implements P25 symbol filtering and
+        shaping so that the resulting data stream can be passed to an
+        ordinary FM modulator. The input is a stream of float symbols
+        scaled to [-1, 1]. The output is a float basedband signal
+        suitable for application to an FM modulator.
+
+        The modulator implements the following Nyquist Raised Cosine
+        Filter:
+
+        |H(f)| = magnitude response of the Nyquist Raised Cosine Filter
+        |H(f)| = 1                          for |f| < 1920 Hz
+        |H(f)| = 0.5 + 0.5cos(2 π f / 1920) for 1920Hz < |f| < 2880Hz
+        |H(f)| = 0                          for |f| > 2880 Hz
+
+        cascaded with the following shaping filter:
+
+        |P(f)| = magnitude response of the Shaping Filter
+        |P(f)| = (π f / 4800) / sin(π f / 4800) for |f| < 2880 Hz
+
         """
 
 	gr.hier_block2.__init__(self, "c4fm_modulator_bf",
 				gr.io_signature(1, 1, gr.sizeof_float), # Input signature
 				gr.io_signature(1, 1, gr.sizeof_float)) # Output signature
 
-        lcm = gru.lcm(input_rate, output_rate)
-        self._interp_factor = int(lcm // input_rate)
-        self._decimation = int(lcm // output_rate)
 
+        if output_rate < input_rate or (output_rate % input_rate) != 0:
+            raise Exception("Invalid output rate")
 
         coeffs = generate_c4fm_taps(input_rate, output_rate, tx=True)
-        self.filter = filter.interp_fir_filter_fff(self._interp_factor, coeffs)
+        fir = filter.interp_fir_filter_fff(output_rate / input_rate, coeffs)
 
-        self.connect(self, self.filter)
+        self.connect(self, fir, self)
 
-        if (self._decimation > 1):
-            self.decimator = filter.rational_resampler_fff(1, self._decimation)
-            self.connect(self.filter, self.decimator, self)
-        else:
-            self.connect(self.filter, self)
 
 
 class c4fm_demodulator_ff(gr.hier_block2):
-    def __init__(self, input_rate, symbol_rate=4800):
+    def __init__(self, input_rate=IF_RATE, symbol_rate=SYMBOL_RATE):
 	gr.hier_block2.__init__(self, "c4fm_demodulator_ff",
 				gr.io_signature(1, 1, gr.sizeof_float),
 				gr.io_signature(1, 1, gr.sizeof_float))
@@ -196,7 +215,7 @@ class c4fm_demodulator_ff(gr.hier_block2):
 
 
 class cqpsk_demodulator_cf(gr.hier_block2):
-    def __init__(self, input_rate, gain_mu=0.025, costas_alpha=0.04, symbol_rate=4800):
+    def __init__(self, input_rate=IF_RATE, gain_mu=0.025, costas_alpha=0.04, symbol_rate=SYMBOL_RATE):
 	gr.hier_block2.__init__(self, "cqpsk_demodulator_cf",
 				gr.io_signature(1, 1, gr.sizeof_gr_complex),
 				gr.io_signature(1, 1, gr.sizeof_float))
@@ -222,8 +241,12 @@ class cqpsk_demodulator_cf(gr.hier_block2):
         rescale = blocks.multiply_const_ff((1 / (pi / 4)))
 
         slicer = op25_repeater.fsk4_slicer_fb([-2.0, 0.0, 2.0, 4.0])
-        
+
         self.connect(self, agc, self.clock, diffdec, to_float, rescale, self)
+
+
+    def get_freq_error(self):	# get error in Hz (approx).
+        return int(self.clock.get_freq_error() * self.symbol_rate)
 
 
     def set_omega(self, omega):
@@ -231,23 +254,46 @@ class cqpsk_demodulator_cf(gr.hier_block2):
 
         if hasattr(self, 'sps') and sps == self.sps:
             return
-        
+
         self.sps = sps
         self.clock.set_omega(self.sps)
 
 
 class c4fm_transmitter_fc(gr.hier_block2):
-    def __init__(self, output_rate=48000):
+    '''C4FM modulator block
+
+    The C4FM modulator must have the deviation set to provide the
+    proper carrier phase shift for each modulated symbol. The
+    deviation is set with a test signal consisting of the following
+    symbol stream:
+
+    ... 01 01 11 11 01 01 11 11 ...
+
+    This test signal is processed by the modulator to create a C4FM
+    signal equivalent to a 1.2 kHz sine wave modulating an FM signal
+    with a peak deviation equal to: π/2 x 1800 Hz = 2827 Hz. The
+    method of measurement for this test signal and the tolerance on
+    the deviation are specified in:
+
+    [1] Digital C4FM / CQPSK Transceiver Methods of Measurement,
+        TIA/EIA-102.CAAA, June 1999.
+
+    [2] Digital C4FM/CQPSK Transceiver Performance Recommendations,
+        TIA/EIA-102.CAAB, November 2000.
+    '''
+    def __init__(self, output_rate):
 	gr.hier_block2.__init__(self, "c4fm_transmitter_fc",
 				gr.io_signature(1, 1, gr.sizeof_float),
 				gr.io_signature(1, 1, gr.sizeof_gr_complex))
-        
-        # Scales [-1, 1] float samples to full-range short samples for CODEC2 encoder
+
+        # Scale [-1, 1] float values to full-range short samples for
+        # the vocoder
         float_to_short = blocks.float_to_short(1, 32768)
 
         # The encoder expects a stream of shorts with rate 8000
         # samples per seconds on input. It generates a stream of
-        # symbols (chars) at 4800 samples per second.
+        # symbols (chars with values 0, 1, 2, 3) at 4800 samples per
+        # second.
         encoder = op25_repeater.vocoder(
             True,    # 0=Decode,True=Encode
             False,   # Verbose flag
@@ -256,22 +302,26 @@ class c4fm_transmitter_fc(gr.hier_block2):
             0,	     # udp port
             False)   # dump raw u vectors
 
-        audio_rate = 24000
+        # Map integer symbols to normalized float values:
+        # 00 -> +1 -> 1/3    (  600 Hz)
+        # 01 -> +3 -> 1      ( 1800 Hz)
+        # 10 -> -1 -> -1/3   ( -600 Hz)
+        # 11 -> -3 -> -1     (-1800 Hz)
+        symbol_mapper = digital.chunks_to_symbols_bf([1.0/3.0, 1.0, -1.0 / 3.0, -1.0])
 
-        symbol_mapper = digital.chunks_to_symbols_bf([1.0/3.0, 1.0, -(1.0/3.0), -1.0])
+        # The C4FM modulator applies a Nyquist Raised Cosine Filter to
+        # the input stream, cascaded with a Shaping Filter. The
+        # purpose of this step is to cut down the bandwidth. The
+        # Raised Cosine Filter cuts off above 2880 Hz.
+        c4fm_mod = c4fm_modulator_ff()
 
-        # The C4FM modulator does 4FSK. It expects a stream of symbols
-        # (chars) on its input with a rate of 4800 symbols per second.
-        # It outputs an "audio" signal (stream of floats) that is
-        # suitable as input to an analog frequency modulator.
-        c4fm_mod = c4fm_modulator_ff(4800, audio_rate)
+        cutoff = 2880
+        taps = filter.firdes.low_pass(1.0, IF_RATE, cutoff, cutoff * 0.1, filter.firdes.WIN_HANN)
+        interpolator = filter.interp_fir_filter_fff(1, taps)
 
-        interp_factor = output_rate / audio_rate
-        low_pass = 2.88e3
-        interp_taps = filter.firdes.low_pass(1.0, output_rate, low_pass, low_pass * 0.1, filter.firdes.WIN_HANN)
-        interpolator = filter.interp_fir_filter_fff(int(interp_factor), interp_taps)
+        fm_mod = fm_modulator_fc(IF_RATE)
 
-        fm_mod = fm_modulator_fc(output_rate)
+        resampler = filter.pfb.arb_resampler_ccf(float(output_rate) / IF_RATE)
 
         self.connect(
             self,
@@ -281,19 +331,25 @@ class c4fm_transmitter_fc(gr.hier_block2):
             c4fm_mod,
             interpolator,
             fm_mod,
+            resampler,
             self
         )
 
 
 class receiver(gr.hier_block2):
-    IF_RATE = 24000
-    
-    def __init__(self, name, input_rate=48000, *inner):
+
+    def __init__(self, name, input_rate, *inner):
         gr.hier_block2.__init__(self, name,
 				gr.io_signature(1, 1, gr.sizeof_gr_complex),
-				gr.io_signature(1, 1, gr.sizeof_float)) 
+				gr.io_signature(1, 1, gr.sizeof_float))
 
-        arb_resampler = arb_resampler_cc(input_rate, self.IF_RATE)
+        arb_resampler = arb_resampler_cc(input_rate, IF_RATE)
+
+        fa = 6250
+        fb = fa + 625
+        coeffs = filter.firdes.low_pass(1.0, IF_RATE, (fb + fa) / 2, fb - fa, filter.firdes.WIN_HANN)
+        cutoff = filter.fir_filter_ccf(1, coeffs)
+
         symbol_mapper = op25_repeater.fsk4_slicer_fb([-2.0, 0.0, 2.0, 4.0])
         frame_decoder = op25_repeater.p25_frame_assembler(
             "127.0.0.1",     # Wireshark host
@@ -309,21 +365,22 @@ class receiver(gr.hier_block2):
         # Scale the dynamic range of the stream back to [-1, 1] and
         # feed it to the soundcard.
         short_to_float = blocks.short_to_float(1, 32768)
-        
+
         self.connect(self, arb_resampler)
-        self.connect(arb_resampler, *inner)
+        self.connect(arb_resampler, cutoff)
+        self.connect(cutoff, *inner)
         self.connect(inner[-1], symbol_mapper, frame_decoder, short_to_float, self)
-        
+
 
 class c4fm_receiver_cf(receiver):
-    def __init__(self, rate=48000):
-        fm_demod = fm_demodulator_cf(self.IF_RATE)
-        c4fm_demod = c4fm_demodulator_ff(self.IF_RATE)
-        receiver.__init__(self, "c4fm_receiver_cf", rate, fm_demod, c4fm_demod) 
+    def __init__(self, input_rate):
+        fm_demod = fm_demodulator_cf()
+        c4fm_demod = c4fm_demodulator_ff()
+        receiver.__init__(self, "c4fm_receiver_cf", input_rate, fm_demod, c4fm_demod)
 
 
 
 class cqpsk_receiver_cf(receiver):
-    def __init__(self, rate=48000):
-        cqpsk_demod = cqpsk_demodulator_cf(self.IF_RATE)
-        receiver.__init__(self, "cqpsk_receiver_cf", rate, cqpsk_demod)
+    def __init__(self, input_rate):
+        cqpsk_demod = cqpsk_demodulator_cf()
+        receiver.__init__(self, "cqpsk_receiver_cf", input_rate, cqpsk_demod)
