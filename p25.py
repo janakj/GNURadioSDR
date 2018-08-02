@@ -51,10 +51,20 @@ IF_RATE = 48000
 
 
 def fm_modulator_fc(rate=IF_RATE, max_deviation=12.5e3, c=1.0):
-    # The analog FM modulator expects an audio signal (stream of
-    # floats) on its input and produces a complex baseband signal on
-    # the output. The output signal can be mixed with a local
-    # oscilator, or directly passed to SDR hardware sink.
+    '''FM Modulator block for P-25.
+
+    The modulator expects an audio signal (stream of floats) on its
+    input and produces a complex baseband signal on the output. The
+    output signal can be mixed with a local oscilator, or directly
+    passed to SDR hardware sink.
+
+    The modulator should map P-25 symbols to deviations as follows:
+    +1 ->   600 Hz
+    +3 ->  1800 Hz
+    -1 ->  -600 Hz
+    -3 -> -1800 Hz
+    '''
+
     k = 2 * math.pi * max_deviation / rate
     sensitivity = c * k # adjust for proper c4fm deviation level
     return analog.frequency_modulator_fc(sensitivity)
@@ -66,6 +76,13 @@ def fm_demodulator_cf(rate=IF_RATE, symbol_deviation=600.0):
 
 
 def symbol_mapper_bf(symbol00=1.0/3.0, symbol01=1.0, symbol10=-1.0/3.0, symbol11=-1.0):
+    '''Map di-bits (values from 0 to 3) to float values.
+    Map integer symbols to normalized float values:
+    00 -> +1 -> 1/3
+    01 -> +3 -> 1
+    10 -> -1 -> -1/3
+    11 -> -3 -> -1
+    '''
     return digital.chunks_to_symbols_bf([symbol00, symbol01, symbol10, symbol11])
 
 
@@ -310,11 +327,6 @@ class c4fm_transmitter_fc(gr.hier_block2):
             0,	     # udp port
             False)   # dump raw u vectors
 
-        # Map integer symbols to normalized float values:
-        # 00 -> +1 -> 1/3    (  600 Hz)
-        # 01 -> +3 -> 1      ( 1800 Hz)
-        # 10 -> -1 -> -1/3   ( -600 Hz)
-        # 11 -> -3 -> -1     (-1800 Hz)
         symbol_mapper = symbol_mapper_bf()
 
         # The C4FM modulator applies a Nyquist Raised Cosine Filter to
