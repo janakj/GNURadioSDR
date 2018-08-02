@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<block>
+  <name>CQPSK Demodulator</name>
+  <key>p25_cqpsk_demodulator_cf</key>
+  <category>p25</category>
+  <import>import p25</import>
+  <make>p25.cqpsk_demodulator_cf(input_rate=$sample_rate, gain_mu=$gain_mu, costas_alpha=$costas_alpha, output_rate=$output_rate)</make>
+
+  <param>
+    <name>Input Rate</name>
+    <key>input_rate</key>
+    <value>48000</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Gain Mu</name>
+    <key>gain_mu</key>
+    <value>0.025</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Costas Alpha</name>
+    <key>costas_alpha</key>
+    <value>0.04</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Output Rate</name>
+    <key>output_rate</key>
+    <value>4800</value>
+    <type>int</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>

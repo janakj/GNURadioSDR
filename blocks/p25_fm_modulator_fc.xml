@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<block>
+  <name>FM Modulator</name>
+  <key>p25_fm_modulator_fc</key>
+  <category>p25</category>
+  <import>import p25</import>
+  <make>p25.fm_modulator_fc(rate=$sample_rate, max_deviation=$max_deviation, c=$adjustment)</make>
+
+  <param>
+    <name>Sample Rate</name>
+    <key>sample_rate</key>
+    <value>48000</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Max Deviation</name>
+    <key>max_deviation</key>
+    <value>12.5e3</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Adjustment Factor</name>
+    <key>adjustment</key>
+    <value>1.5</value>
+    <type>real</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>float</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>

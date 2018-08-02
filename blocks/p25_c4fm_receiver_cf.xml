@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<block>
+  <name>C4FM Receiver</name>
+  <key>p25_c4fm_receiver_cf</key>
+  <category>p25</category>
+  <import>import p25</import>
+  <make>p25.c4fm_receiver_cf($input_rate)</make>
+
+  <param>
+    <name>Input Rate</name>
+    <key>input_rate</key>
+    <type>int</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>

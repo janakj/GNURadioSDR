@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<block>
+  <name>Symbol Demapper</name>
+  <key>p25_symbol_mapper_fb</key>
+  <category>p25</category>
+  <import>import p25</import>
+  <make>p25.symbol_mapper_fb(threshold1=$threshold1, threshold2=$threshold2, threshold3=$threshold3, threshold4=$threshold4)</make>
+
+  <param>
+    <name>Threshold 1</name>
+    <key>threshold1</key>
+    <value>-2.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Threshold 2</name>
+    <key>threshold2</key>
+    <value>0.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Threshold 3</name>
+    <key>threshold3</key>
+    <value>2.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Threshold 4</name>
+    <key>threshold4</key>
+    <value>4.0</value>
+    <type>real</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>float</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>byte</type>
+  </source>
+</block>

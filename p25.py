@@ -50,19 +50,27 @@ SYMBOL_RATE = 4800
 IF_RATE = 48000
 
 
-def fm_modulator_fc(rate=IF_RATE, max_deviation=12.5e3):
+def fm_modulator_fc(rate=IF_RATE, max_deviation=12.5e3, c=1.0):
     # The analog FM modulator expects an audio signal (stream of
     # floats) on its input and produces a complex baseband signal on
     # the output. The output signal can be mixed with a local
     # oscilator, or directly passed to SDR hardware sink.
     k = 2 * math.pi * max_deviation / rate
-    sensitivity = 1.5 * k # adjust for proper c4fm deviation level
+    sensitivity = c * k # adjust for proper c4fm deviation level
     return analog.frequency_modulator_fc(sensitivity)
 
 
 def fm_demodulator_cf(rate=IF_RATE, symbol_deviation=600.0):
     gain = rate / (2.0 * pi * symbol_deviation)
     return analog.quadrature_demod_cf(gain)
+
+
+def symbol_mapper_bf(symbol00=1.0/3.0, symbol01=1.0, symbol10=-1.0/3.0, symbol11=-1.0):
+    return digital.chunks_to_symbols_bf([symbol00, symbol01, symbol10, symbol11])
+
+
+def symbol_mapper_fb(threshold1=-2.0, threshold2=0.0, threshold3=2.0, threshold4=4.0):
+    return op25_repeater.fsk4_slicer_fb([threshold1, threshold2, threshold3, threshold4])
 
 
 def transfer_function_rx():
@@ -200,30 +208,30 @@ class c4fm_modulator_ff(gr.hier_block2):
         self.connect(self, fir, self)
 
 
-
 class c4fm_demodulator_ff(gr.hier_block2):
-    def __init__(self, input_rate=IF_RATE, symbol_rate=SYMBOL_RATE):
+    def __init__(self, input_rate=IF_RATE, output_rate=SYMBOL_RATE):
 	gr.hier_block2.__init__(self, "c4fm_demodulator_ff",
 				gr.io_signature(1, 1, gr.sizeof_float),
 				gr.io_signature(1, 1, gr.sizeof_float))
 
-        coeffs = generate_c4fm_taps(symbol_rate, input_rate, span=9, tx=False)
+        coeffs = generate_c4fm_taps(output_rate, input_rate, span=9, tx=False)
         symbol_filter = filter.fir_filter_fff(1, coeffs)
-        fsk4_demod = op25.fsk4_demod_ff(gr.msg_queue(2), input_rate, symbol_rate)
+        fsk4_demod = op25.fsk4_demod_ff(gr.msg_queue(2), input_rate, output_rate)
 
         self.connect(self, symbol_filter, fsk4_demod, self)
 
 
 class cqpsk_demodulator_cf(gr.hier_block2):
-    def __init__(self, input_rate=IF_RATE, gain_mu=0.025, costas_alpha=0.04, symbol_rate=SYMBOL_RATE):
+    def __init__(self, input_rate=IF_RATE, gain_mu=0.025, costas_alpha=0.04, output_rate=SYMBOL_RATE):
 	gr.hier_block2.__init__(self, "cqpsk_demodulator_cf",
 				gr.io_signature(1, 1, gr.sizeof_gr_complex),
 				gr.io_signature(1, 1, gr.sizeof_float))
         self.input_rate = input_rate
+        self.output_rate = output_rate
 
         agc = analog.feedforward_agc_cc(16, 1.0)
 
-        omega = float(self.input_rate) / float(symbol_rate)
+        omega = float(self.input_rate) / float(output_rate)
         gain_omega = 0.1 * gain_mu * gain_mu
         alpha = costas_alpha
         beta = 0.125 * alpha * alpha
@@ -246,7 +254,7 @@ class cqpsk_demodulator_cf(gr.hier_block2):
 
 
     def get_freq_error(self):	# get error in Hz (approx).
-        return int(self.clock.get_freq_error() * self.symbol_rate)
+        return int(self.clock.get_freq_error() * self.output_rate)
 
 
     def set_omega(self, omega):
@@ -307,7 +315,7 @@ class c4fm_transmitter_fc(gr.hier_block2):
         # 01 -> +3 -> 1      ( 1800 Hz)
         # 10 -> -1 -> -1/3   ( -600 Hz)
         # 11 -> -3 -> -1     (-1800 Hz)
-        symbol_mapper = digital.chunks_to_symbols_bf([1.0/3.0, 1.0, -1.0 / 3.0, -1.0])
+        symbol_mapper = symbol_mapper_bf()
 
         # The C4FM modulator applies a Nyquist Raised Cosine Filter to
         # the input stream, cascaded with a Shaping Filter. The
@@ -350,7 +358,7 @@ class receiver(gr.hier_block2):
         coeffs = filter.firdes.low_pass(1.0, IF_RATE, (fb + fa) / 2, fb - fa, filter.firdes.WIN_HANN)
         cutoff = filter.fir_filter_ccf(1, coeffs)
 
-        symbol_mapper = op25_repeater.fsk4_slicer_fb([-2.0, 0.0, 2.0, 4.0])
+        symbol_mapper = symbol_mapper_fb()
         frame_decoder = op25_repeater.p25_frame_assembler(
             "127.0.0.1",     # Wireshark host
             0,               # Wireshark port

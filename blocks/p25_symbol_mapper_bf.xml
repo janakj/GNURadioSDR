@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<block>
+  <name>Symbol Mapper</name>
+  <key>p25_symbol_mapper_bf</key>
+  <category>p25</category>
+  <import>import p25</import>
+  <make>p25.symbol_mapper_bf(symbol00=$symbol00, symbol01=$symbol01, symbol10=$symbol10, symbol11=$symbol11)</make>
+
+  <param>
+    <name>Symbol 00</name>
+    <key>symbol00</key>
+    <value>1.0/3.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Symbol 01</name>
+    <key>symbol01</key>
+    <value>1.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Symbol 10</name>
+    <key>symbol10</key>
+    <value>-1.0/3.0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>Symbol 11</name>
+    <key>symbol11</key>
+    <value>-1.0</value>
+    <type>real</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>byte</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>
