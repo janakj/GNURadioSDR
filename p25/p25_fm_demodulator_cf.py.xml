@@ -1,0 +1,36 @@
+<block>
+  <name>FM Demodulator</name>
+  <key>p25_fm_demodulator_cf</key>
+  <category>P25</category>
+  <import>from p25_fm_demodulator_cf import p25_fm_demodulator_cf  # grc-generated hier_block</import>
+  <make>p25_fm_demodulator_cf(
+    samp_rate=$samp_rate,
+    symbol_deviation=$symbol_deviation,
+)</make>
+  <callback>set_samp_rate($samp_rate)</callback>
+  <callback>set_symbol_deviation($symbol_deviation)</callback>
+  <param>
+    <name>Sample Rate</name>
+    <key>samp_rate</key>
+    <value>48000</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Symbol Deviation</name>
+    <key>symbol_deviation</key>
+    <value>600.0</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>input</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>output</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>/home/janakj/.grc_gnuradio/p25_fm_demodulator_cf.py</doc>
+  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_fm_demodulator_cf.grc</grc_source>
+</block>

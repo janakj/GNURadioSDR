@@ -1,0 +1,28 @@
+<block>
+  <name>C4FM Transmitter</name>
+  <key>p25_c4fm_transmitter_fc</key>
+  <category>P25</category>
+  <import>from p25_c4fm_transmitter_fc import p25_c4fm_transmitter_fc  # grc-generated hier_block</import>
+  <make>p25_c4fm_transmitter_fc(
+    output_rate=$output_rate,
+)</make>
+  <callback>set_output_rate($output_rate)</callback>
+  <param>
+    <name>Output Rate</name>
+    <key>output_rate</key>
+    <value>48000</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>input</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>output</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>/home/janakj/.grc_gnuradio/p25_c4fm_transmitter_fc.py</doc>
+  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_c4fm_transmitter_fc.grc</grc_source>
+</block>

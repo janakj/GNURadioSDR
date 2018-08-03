@@ -1,0 +1,52 @@
+<block>
+  <name>Symbol Demapper</name>
+  <key>p25_symbol_mapper_fb</key>
+  <category>P25</category>
+  <import>from p25_symbol_mapper_fb import p25_symbol_mapper_fb  # grc-generated hier_block</import>
+  <make>p25_symbol_mapper_fb(
+    threshold1=$threshold1,
+    threshold2=$threshold2,
+    threshold3=$threshold3,
+    threshold4=$threshold4,
+)</make>
+  <callback>set_threshold1($threshold1)</callback>
+  <callback>set_threshold2($threshold2)</callback>
+  <callback>set_threshold3($threshold3)</callback>
+  <callback>set_threshold4($threshold4)</callback>
+  <param>
+    <name>Threshold 1</name>
+    <key>threshold1</key>
+    <value>-2</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Threshold 2</name>
+    <key>threshold2</key>
+    <value>0</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Threshold 3</name>
+    <key>threshold3</key>
+    <value>2.0</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Threshold 4</name>
+    <key>threshold4</key>
+    <value>4.0</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>byte</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>/home/janakj/.grc_gnuradio/p25_symbol_mapper_fb.py</doc>
+  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_symbol_mapper_fb.grc</grc_source>
+</block>

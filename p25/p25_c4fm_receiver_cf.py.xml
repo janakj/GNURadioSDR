@@ -1,0 +1,28 @@
+<block>
+  <name>C4FM Receiver</name>
+  <key>p25_c4fm_receiver_cf</key>
+  <category>P25</category>
+  <import>from p25_c4fm_receiver_cf import p25_c4fm_receiver_cf  # grc-generated hier_block</import>
+  <make>p25_c4fm_receiver_cf(
+    input_rate=$input_rate,
+)</make>
+  <callback>set_input_rate($input_rate)</callback>
+  <param>
+    <name>Input Rate</name>
+    <key>input_rate</key>
+    <value>48000</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>/home/janakj/.grc_gnuradio/p25_c4fm_receiver_cf.py</doc>
+  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_c4fm_receiver_cf.grc</grc_source>
+</block>

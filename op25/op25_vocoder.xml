@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<block>
+  <name>op25_vocoder</name>
+  <key>op25_vocoder</key>
+  <category>P25</category>
+  <import>import op25_repeater</import>
+  <make>op25_repeater.vocoder(True, False, 0, "", 0, False)</make>
+
+  <sink>
+    <name>in</name>
+    <type>short</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>byte</type>
+  </source>
+</block>

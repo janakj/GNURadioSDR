@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-  <name>Symbol Demapper</name>
-  <key>p25_symbol_mapper_fb</key>
-  <category>p25</category>
-  <import>import p25</import>
-  <make>p25.symbol_mapper_fb(threshold1=$threshold1, threshold2=$threshold2, threshold3=$threshold3, threshold4=$threshold4)</make>
+  <name>op25_fsk4_slicer_fb</name>
+  <key>op25_fsk4_slicer_fb</key>
+  <category>P25</category>
+  <import>import op25_repeater</import>
+  <make>op25_repeater.fsk4_slicer_fb([$threshold1, $threshold2, $threshold3, $threshold4])</make>
 
   <param>
     <name>Threshold 1</name>

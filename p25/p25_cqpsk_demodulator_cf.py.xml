@@ -1,0 +1,52 @@
+<block>
+  <name>CQPSK Demodulator</name>
+  <key>p25_cqpsk_demodulator_cf</key>
+  <category>P25</category>
+  <import>from p25_cqpsk_demodulator_cf import p25_cqpsk_demodulator_cf  # grc-generated hier_block</import>
+  <make>p25_cqpsk_demodulator_cf(
+    costas_alpha=$costas_alpha,
+    gain_mu=$gain_mu,
+    input_rate=$input_rate,
+    output_rate=$output_rate,
+)</make>
+  <callback>set_costas_alpha($costas_alpha)</callback>
+  <callback>set_gain_mu($gain_mu)</callback>
+  <callback>set_input_rate($input_rate)</callback>
+  <callback>set_output_rate($output_rate)</callback>
+  <param>
+    <name>Costas Alpha</name>
+    <key>costas_alpha</key>
+    <value>0.04</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Gain Mu</name>
+    <key>gain_mu</key>
+    <value>0.025</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Input Rate</name>
+    <key>input_rate</key>
+    <value>48000</value>
+    <type>raw</type>
+  </param>
+  <param>
+    <name>Output Rate</name>
+    <key>output_rate</key>
+    <value>4800</value>
+    <type>raw</type>
+  </param>
+  <sink>
+    <name>input</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>output</name>
+    <type>float</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>/home/janakj/.grc_gnuradio/p25_cqpsk_demodulator_cf.py</doc>
+  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_cqpsk_demodulator_cf.grc</grc_source>
+</block>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<block>
+  <name>op25_frame_assembler</name>
+  <key>op25_frame_assembler</key>
+  <category>P25</category>
+  <import>import op25_repeater</import>
+  <import>from gnuradio import gr</import>
+  <make>op25_repeater.p25_frame_assembler("127.0.01", 0, True, True, True, False, gr.msg_queue(1), True, False)</make>
+  <sink>
+    <name>in</name>
+    <type>byte</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>short</type>
+  </source>
+</block>
