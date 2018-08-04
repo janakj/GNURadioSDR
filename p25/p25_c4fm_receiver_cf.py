@@ -2,9 +2,8 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Receiver
-# Generated: Fri Aug  3 00:31:54 2018
+# Generated: Sat Aug  4 18:51:00 2018
 ##################################################
-
 
 import os
 import sys
@@ -49,7 +48,7 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
             threshold1=-2,
             threshold2=0,
             threshold3=2.0,
-            threshold4=4.0,
+            threshold4=8.0,
         )
         self.p25_fm_demodulator_cf_0 = p25_fm_demodulator_cf(
             samp_rate=48000,
@@ -66,6 +65,8 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
             input_rate=input_rate,
             output_rate=48000,
         )
+
+
 
         ##################################################
         # Connections

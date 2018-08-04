@@ -16,18 +16,21 @@
     <key>factor</key>
     <value>1.5</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Maximum Deviation</name>
     <key>max_deviation</key>
     <value>12.5e3</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
     <value>48000</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>input</name>

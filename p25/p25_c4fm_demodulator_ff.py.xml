@@ -14,12 +14,14 @@
     <key>input_rate</key>
     <value>48000</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Output Rate</name>
     <key>output_rate</key>
     <value>4800</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>input</name>

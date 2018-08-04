@@ -2,9 +2,8 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: CQPSK Demodulator
-# Generated: Fri Aug  3 00:34:02 2018
+# Generated: Sat Aug  4 16:52:29 2018
 ##################################################
-
 
 from gnuradio import analog
 from gnuradio import blocks
@@ -49,6 +48,8 @@ class p25_cqpsk_demodulator_cf(gr.hier_block2):
         self.diffdec = digital.diff_phasor_cc()
         self.clock = op25_repeater.gardner_costas_cc(omega, gain_mu, gain_omega, alpha, beta, fmax, -fmax)
         self.agc = analog.feedforward_agc_cc(16, 1.0)
+
+
 
         ##################################################
         # Connections
