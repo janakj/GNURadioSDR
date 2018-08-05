@@ -2,9 +2,8 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Symbol Demapper
-# Generated: Fri Aug  3 00:35:26 2018
+# Generated: Sun Aug  5 13:38:31 2018
 ##################################################
-
 
 from gnuradio import gr
 from gnuradio.filter import firdes
@@ -32,6 +31,8 @@ class p25_symbol_mapper_fb(gr.hier_block2):
         # Blocks
         ##################################################
         self.op25_fsk4_slicer_fb_0 = op25_repeater.fsk4_slicer_fb([-2.0, 0.0, 2.0, 4.0])
+
+
 
         ##################################################
         # Connections

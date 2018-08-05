@@ -33,6 +33,6 @@
     <type>complex</type>
     <vlen>1</vlen>
   </source>
-  <doc>/home/janakj/.grc_gnuradio/p25_arb_resampler_cc.py</doc>
-  <grc_source>/media/sf_janakj/sdr/GNURadioSDR/p25/p25_arb_resampler_cc.grc</grc_source>
+  <doc>/home/irt/.grc_gnuradio/p25_arb_resampler_cc.py</doc>
+  <grc_source>/home/irt/janakj/GNURadioSDR/p25/p25_arb_resampler_cc.grc</grc_source>
 </block>

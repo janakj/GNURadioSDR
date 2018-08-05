@@ -14,21 +14,21 @@
   <param>
     <name>Factor</name>
     <key>factor</key>
-    <value>1.5</value>
+    <value>1.0</value>
     <type>raw</type>
     <hide>none</hide>
   </param>
   <param>
     <name>Maximum Deviation</name>
     <key>max_deviation</key>
-    <value>12.5e3</value>
+    <value>2.5e3</value>
     <type>raw</type>
     <hide>none</hide>
   </param>
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
-    <value>48000</value>
+    <value>48000 * 150</value>
     <type>raw</type>
     <hide>none</hide>
   </param>
@@ -42,6 +42,6 @@
     <type>complex</type>
     <vlen>1</vlen>
   </source>
-  <doc>/home/janakj/.grc_gnuradio/p25_fm_modulator_fc.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_fm_modulator_fc.grc</grc_source>
+  <doc>/home/irt/.grc_gnuradio/p25_fm_modulator_fc.py</doc>
+  <grc_source>/home/irt/janakj/GNURadioSDR/p25/p25_fm_modulator_fc.grc</grc_source>
 </block>

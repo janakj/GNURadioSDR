@@ -4,22 +4,24 @@
   <category>P25</category>
   <import>from p25_fm_demodulator_cf import p25_fm_demodulator_cf  # grc-generated hier_block</import>
   <make>p25_fm_demodulator_cf(
+    max_deviation=$max_deviation,
     samp_rate=$samp_rate,
-    symbol_deviation=$symbol_deviation,
 )</make>
+  <callback>set_max_deviation($max_deviation)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
-  <callback>set_symbol_deviation($symbol_deviation)</callback>
+  <param>
+    <name>Maximum Deviation</name>
+    <key>max_deviation</key>
+    <value>2500</value>
+    <type>raw</type>
+    <hide>none</hide>
+  </param>
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
-    <value>48000</value>
+    <value>48000 * 20</value>
     <type>raw</type>
-  </param>
-  <param>
-    <name>Symbol Deviation</name>
-    <key>symbol_deviation</key>
-    <value>600.0</value>
-    <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>input</name>
@@ -31,6 +33,6 @@
     <type>float</type>
     <vlen>1</vlen>
   </source>
-  <doc>/home/janakj/.grc_gnuradio/p25_fm_demodulator_cf.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_fm_demodulator_cf.grc</grc_source>
+  <doc>/home/irt/.grc_gnuradio/p25_fm_demodulator_cf.py</doc>
+  <grc_source>/home/irt/janakj/GNURadioSDR/p25/p25_fm_demodulator_cf.grc</grc_source>
 </block>

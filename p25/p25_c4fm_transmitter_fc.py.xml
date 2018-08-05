@@ -10,8 +10,9 @@
   <param>
     <name>Output Rate</name>
     <key>output_rate</key>
-    <value>48000</value>
+    <value>48000 * 150</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>input</name>
@@ -23,6 +24,6 @@
     <type>complex</type>
     <vlen>1</vlen>
   </source>
-  <doc>/home/janakj/.grc_gnuradio/p25_c4fm_transmitter_fc.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_c4fm_transmitter_fc.grc</grc_source>
+  <doc>/home/irt/.grc_gnuradio/p25_c4fm_transmitter_fc.py</doc>
+  <grc_source>/home/irt/janakj/GNURadioSDR/p25/p25_c4fm_transmitter_fc.grc</grc_source>
 </block>

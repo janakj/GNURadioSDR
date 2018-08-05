@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.11'?>
+<?grc format='1' created='3.7.12'?>
 <flow_graph>
   <timestamp>Thu Aug  2 21:46:13 2018</timestamp>
   <block>
@@ -73,6 +73,10 @@
       <value>True</value>
     </param>
     <param>
+      <key>sizing_mode</key>
+      <value>fixed</value>
+    </param>
+    <param>
       <key>thread_safe_setters</key>
       <value></value>
     </param>
@@ -80,12 +84,24 @@
       <key>title</key>
       <value>C4FM Transmitter</value>
     </param>
+    <param>
+      <key>placement</key>
+      <value>(0,0)</value>
+    </param>
   </block>
   <block>
-    <key>variable</key>
+    <key>variable_low_pass_filter_taps</key>
+    <param>
+      <key>beta</key>
+      <value>6.76</value>
+    </param>
     <param>
       <key>comment</key>
       <value></value>
+    </param>
+    <param>
+      <key>cutoff_freq</key>
+      <value>3000</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -93,19 +109,31 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 114)</value>
+      <value>(328, 4)</value>
     </param>
     <param>
       <key>_rotation</key>
       <value>0</value>
     </param>
     <param>
-      <key>id</key>
-      <value>cutoff</value>
+      <key>gain</key>
+      <value>output_rate / 48000</value>
     </param>
     <param>
-      <key>value</key>
-      <value>2880</value>
+      <key>id</key>
+      <value>taps</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>output_rate</value>
+    </param>
+    <param>
+      <key>width</key>
+      <value>2000</value>
+    </param>
+    <param>
+      <key>win</key>
+      <value>firdes.WIN_HAMMING</value>
     </param>
   </block>
   <block>
@@ -128,7 +156,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(296, 166)</value>
+      <value>(536, 204)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -175,11 +203,11 @@
     </param>
     <param>
       <key>factor</key>
-      <value>1.5</value>
+      <value>1.0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(511, 308)</value>
+      <value>(493, 399)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -195,7 +223,7 @@
     </param>
     <param>
       <key>max_deviation</key>
-      <value>12.5e3</value>
+      <value>2.5e3</value>
     </param>
     <param>
       <key>minoutbuf</key>
@@ -203,7 +231,7 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>48000</value>
+      <value>output_rate</value>
     </param>
   </block>
   <block>
@@ -222,7 +250,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(7, 181)</value>
+      <value>(488, 4)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -257,7 +285,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1034, 159)</value>
+      <value>(739, 308)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -265,11 +293,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>interpolator</value>
+      <value>interp_fir_filter_xxx_0</value>
     </param>
     <param>
       <key>interp</key>
-      <value>1</value>
+      <value>output_rate / 48000</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -285,7 +313,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>filter.firdes.low_pass(1.0, 48000, cutoff, cutoff * 0.1, filter.firdes.WIN_HANN)</value>
+      <value>taps</value>
     </param>
     <param>
       <key>type</key>
@@ -312,7 +340,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(475, 170)</value>
+      <value>(704, 208)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -366,12 +394,16 @@
       <value></value>
     </param>
     <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
       <key>type</key>
       <value>intx</value>
     </param>
     <param>
       <key>value</key>
-      <value>48000</value>
+      <value>48000 * 150</value>
     </param>
   </block>
   <block>
@@ -394,7 +426,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(868, 159)</value>
+      <value>(491, 308)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -433,7 +465,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1030, 324)</value>
+      <value>(812, 415)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -476,7 +508,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(136, 166)</value>
+      <value>(376, 204)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -508,69 +540,6 @@
     </param>
   </block>
   <block>
-    <key>pfb_arb_resampler_xxx</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(746, 300)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>resampler</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>nfilts</key>
-      <value>32</value>
-    </param>
-    <param>
-      <key>rrate</key>
-      <value>float(output_rate) / 48000</value>
-    </param>
-    <param>
-      <key>samp_delay</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>atten</key>
-      <value>100</value>
-    </param>
-    <param>
-      <key>taps</key>
-      <value></value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>ccf</value>
-    </param>
-  </block>
-  <block>
     <key>p25_symbol_mapper_bf</key>
     <param>
       <key>alias</key>
@@ -590,7 +559,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(671, 142)</value>
+      <value>(864, 180)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -633,12 +602,12 @@
   </connection>
   <connection>
     <source_block_id>fm_mod</source_block_id>
-    <sink_block_id>resampler</sink_block_id>
+    <sink_block_id>pad_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>interpolator</source_block_id>
+    <source_block_id>interp_fir_filter_xxx_0</source_block_id>
     <sink_block_id>fm_mod</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -651,19 +620,13 @@
   </connection>
   <connection>
     <source_block_id>p25_c4fm_modulator_ff_0</source_block_id>
-    <sink_block_id>interpolator</sink_block_id>
+    <sink_block_id>interp_fir_filter_xxx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>pad_source_0</source_block_id>
     <sink_block_id>float_to_short</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>resampler</source_block_id>
-    <sink_block_id>pad_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Modulator
-# Generated: Sat Aug  4 18:32:30 2018
+# Generated: Sun Aug  5 13:38:10 2018
 ##################################################
 
 from gnuradio import filter
@@ -30,7 +30,7 @@ class p25_c4fm_modulator_ff(gr.hier_block2):
         # Blocks
         ##################################################
         self.low_pass_filter_0 = filter.interp_fir_filter_fff(1, firdes.low_pass(
-        	1, output_rate, 2880, 500, firdes.WIN_HAMMING, 6.76))
+        	6, output_rate, 2880, 500, firdes.WIN_HAMMING, 6.76))
         self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_fff(output_rate / input_rate, (p25.generate_c4fm_taps(input_rate, output_rate, tx=True)))
         self.interp_fir_filter_xxx_0.declare_sample_delay(0)
 
@@ -55,5 +55,5 @@ class p25_c4fm_modulator_ff(gr.hier_block2):
 
     def set_output_rate(self, output_rate):
         self.output_rate = output_rate
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.output_rate, 2880, 500, firdes.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(6, self.output_rate, 2880, 500, firdes.WIN_HAMMING, 6.76))
         self.interp_fir_filter_xxx_0.set_taps((p25.generate_c4fm_taps(self.input_rate, self.output_rate, tx=True)))

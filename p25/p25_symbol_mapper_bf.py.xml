@@ -18,24 +18,28 @@
     <key>symbol00</key>
     <value>1.0/3.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Symbol 01</name>
     <key>symbol01</key>
     <value>1.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Symbol 10</name>
     <key>symbol10</key>
     <value>-1.0/3.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Symbol 11</name>
     <key>symbol11</key>
     <value>-1.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>input</name>
@@ -47,6 +51,6 @@
     <type>float</type>
     <vlen>1</vlen>
   </source>
-  <doc>/home/janakj/.grc_gnuradio/p25_symbol_mapper_bf.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_symbol_mapper_bf.grc</grc_source>
+  <doc>/home/irt/.grc_gnuradio/p25_symbol_mapper_bf.py</doc>
+  <grc_source>/home/irt/janakj/GNURadioSDR/p25/p25_symbol_mapper_bf.grc</grc_source>
 </block>
