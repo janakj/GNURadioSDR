@@ -128,7 +128,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(396, 10)</value>
+      <value>(397, 10)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -141,6 +141,33 @@
     <param>
       <key>value</key>
       <value>fa + 0.1 * fa</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(581, 10)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>if_rate</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>8000</value>
     </param>
   </block>
   <block>
@@ -210,7 +237,7 @@
     </param>
     <param>
       <key>decim</key>
-      <value>input_rate // 48000</value>
+      <value>input_rate // if_rate</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -218,7 +245,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(645, 163)</value>
+      <value>(629, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -296,7 +323,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(194, 9)</value>
+      <value>(193, 9)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -324,7 +351,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>48000 * 20</value>
+      <value>8000 * 120</value>
     </param>
   </block>
   <block>
@@ -398,7 +425,7 @@
     </param>
     <param>
       <key>input_rate</key>
-      <value>48000</value>
+      <value>if_rate</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -433,7 +460,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(860, 163)</value>
+      <value>(859, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -457,7 +484,7 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>48000</value>
+      <value>if_rate</value>
     </param>
   </block>
   <block>
@@ -570,7 +597,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(466, 171)</value>
+      <value>(464, 168)</value>
     </param>
     <param>
       <key>_rotation</key>

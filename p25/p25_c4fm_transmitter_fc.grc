@@ -90,6 +90,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(592, 2)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>if_rate</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>48000</value>
+    </param>
+  </block>
+  <block>
     <key>variable_low_pass_filter_taps</key>
     <param>
       <key>beta</key>
@@ -117,7 +144,7 @@
     </param>
     <param>
       <key>gain</key>
-      <value>output_rate / 48000</value>
+      <value>output_rate // if_rate</value>
     </param>
     <param>
       <key>id</key>
@@ -231,7 +258,7 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>48000</value>
+      <value>if_rate</value>
     </param>
   </block>
   <block>
@@ -250,7 +277,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(488, 4)</value>
+      <value>(501, 3)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -297,7 +324,7 @@
     </param>
     <param>
       <key>interp</key>
-      <value>output_rate / 48000</value>
+      <value>output_rate // if_rate</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -450,7 +477,7 @@
     </param>
     <param>
       <key>output_rate</key>
-      <value>48000</value>
+      <value>if_rate</value>
     </param>
   </block>
   <block>
@@ -465,7 +492,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(812, 415)</value>
+      <value>(805, 418)</value>
     </param>
     <param>
       <key>_rotation</key>

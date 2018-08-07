@@ -2,8 +2,9 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: CQPSK Receiver
-# Generated: Sun Aug  5 13:38:20 2018
+# Generated: Fri Aug  3 00:34:34 2018
 ##################################################
+
 
 import os
 import sys
@@ -62,8 +63,6 @@ class p25_cqpsk_receiver_cf(gr.hier_block2):
             input_rate=input_rate,
             output_rate=48000,
         )
-
-
 
         ##################################################
         # Connections

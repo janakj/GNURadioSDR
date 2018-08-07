@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: FM Demodulator
-# Generated: Sun Aug  5 13:38:23 2018
+# Generated: Tue Aug  7 13:02:08 2018
 ##################################################
 
 from gnuradio import analog
@@ -13,7 +13,7 @@ import math
 
 class p25_fm_demodulator_cf(gr.hier_block2):
 
-    def __init__(self, max_deviation=2500, samp_rate=48000 * 20):
+    def __init__(self, max_deviation=2500, samp_rate=8000):
         gr.hier_block2.__init__(
             self, "FM Demodulator",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),

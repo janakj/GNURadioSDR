@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Receiver
-# Generated: Tue Aug  7 00:35:14 2018
+# Generated: Tue Aug  7 13:02:27 2018
 ##################################################
 
 import os
@@ -21,7 +21,7 @@ import op25_repeater
 
 class p25_c4fm_receiver_cf(gr.hier_block2):
 
-    def __init__(self, input_rate=48000 * 20):
+    def __init__(self, input_rate=8000 * 120):
         gr.hier_block2.__init__(
             self, "C4FM Receiver",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
@@ -37,6 +37,7 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
         # Variables
         ##################################################
         self.fa = fa = 6250
+        self.if_rate = if_rate = 8000
         self.fb = fb = fa + 0.1 * fa
 
         ##################################################
@@ -51,14 +52,14 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
         )
         self.p25_fm_demodulator_cf_0 = p25_fm_demodulator_cf(
             max_deviation=2500,
-            samp_rate=48000,
+            samp_rate=if_rate,
         )
         self.p25_c4fm_demodulator_ff_0 = p25_c4fm_demodulator_ff(
-            input_rate=48000,
+            input_rate=if_rate,
             output_rate=4800,
         )
         self.op25_frame_assembler_0 = op25_repeater.p25_frame_assembler("127.0.01", 0, True, True, True, False, gr.msg_queue(1), True, False)
-        self.cutoff = filter.fir_filter_ccf(input_rate // 48000, (filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HANN)))
+        self.cutoff = filter.fir_filter_ccf(input_rate // if_rate, (filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HANN)))
         self.cutoff.declare_sample_delay(0)
         self.baseband_amp = blocks.multiply_const_vff((6.0, ))
 
@@ -89,6 +90,14 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
     def set_fa(self, fa):
         self.fa = fa
         self.set_fb(self.fa + 0.1 * self.fa)
+
+    def get_if_rate(self):
+        return self.if_rate
+
+    def set_if_rate(self, if_rate):
+        self.if_rate = if_rate
+        self.p25_fm_demodulator_cf_0.set_samp_rate(self.if_rate)
+        self.p25_c4fm_demodulator_ff_0.set_input_rate(self.if_rate)
 
     def get_fb(self):
         return self.fb

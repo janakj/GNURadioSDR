@@ -356,7 +356,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>48000 * 20</value>
+      <value>8000</value>
     </param>
   </block>
   <connection>
