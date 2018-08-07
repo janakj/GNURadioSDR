@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Transmitter
-# Generated: Tue Aug  7 12:48:01 2018
+# Generated: Tue Aug  7 14:18:53 2018
 ##################################################
 
 import os
@@ -53,6 +53,7 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
         self.p25_c4fm_modulator_ff_0 = p25_c4fm_modulator_ff(
             input_rate=4800,
             output_rate=if_rate,
+            gain=6.0,
         )
         self.op25_vocoder_0 = op25_repeater.vocoder(True, False, 0, "", 0, False)
         self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccf(output_rate // if_rate, (taps))

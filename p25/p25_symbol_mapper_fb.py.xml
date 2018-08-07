@@ -18,24 +18,28 @@
     <key>threshold1</key>
     <value>-2</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Threshold 2</name>
     <key>threshold2</key>
     <value>0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Threshold 3</name>
     <key>threshold3</key>
     <value>2.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <param>
     <name>Threshold 4</name>
     <key>threshold4</key>
     <value>4.0</value>
     <type>raw</type>
+    <hide>none</hide>
   </param>
   <sink>
     <name>in</name>
@@ -48,5 +52,5 @@
     <vlen>1</vlen>
   </source>
   <doc>/home/janakj/.grc_gnuradio/p25_symbol_mapper_fb.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_symbol_mapper_fb.grc</grc_source>
+  <grc_source>/media/sf_janakj/sdr/GNURadioSDR/p25/p25_symbol_mapper_fb.grc</grc_source>
 </block>

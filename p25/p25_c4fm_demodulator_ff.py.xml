@@ -34,5 +34,5 @@
     <vlen>1</vlen>
   </source>
   <doc>/home/janakj/.grc_gnuradio/p25_c4fm_demodulator_ff.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_c4fm_demodulator_ff.grc</grc_source>
+  <grc_source>/media/sf_janakj/sdr/GNURadioSDR/p25/p25_c4fm_demodulator_ff.grc</grc_source>
 </block>

@@ -6,9 +6,11 @@
   <make>p25_c4fm_modulator_ff(
     input_rate=$input_rate,
     output_rate=$output_rate,
+    gain=$gain,
 )</make>
   <callback>set_input_rate($input_rate)</callback>
   <callback>set_output_rate($output_rate)</callback>
+  <callback>set_gain($gain)</callback>
   <param>
     <name>Input Rate</name>
     <key>input_rate</key>
@@ -23,6 +25,13 @@
     <type>raw</type>
     <hide>none</hide>
   </param>
+  <param>
+    <name>gain</name>
+    <key>gain</key>
+    <value>6.0</value>
+    <type>raw</type>
+    <hide>none</hide>
+  </param>
   <sink>
     <name>input</name>
     <type>float</type>
@@ -34,5 +43,5 @@
     <vlen>1</vlen>
   </source>
   <doc>/home/janakj/.grc_gnuradio/p25_c4fm_modulator_ff.py</doc>
-  <grc_source>/home/janakj/sdr/GNURadioSDR/p25/p25_c4fm_modulator_ff.grc</grc_source>
+  <grc_source>/media/sf_janakj/sdr/GNURadioSDR/p25/p25_c4fm_modulator_ff.grc</grc_source>
 </block>

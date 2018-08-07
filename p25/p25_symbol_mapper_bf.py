@@ -2,9 +2,8 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Symbol Mapper
-# Generated: Fri Aug  3 00:34:47 2018
+# Generated: Tue Aug  7 13:06:06 2018
 ##################################################
-
 
 from gnuradio import digital
 from gnuradio import gr
@@ -32,6 +31,8 @@ class p25_symbol_mapper_bf(gr.hier_block2):
         # Blocks
         ##################################################
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bf(((symbol00, symbol01, symbol10, symbol11)), 1)
+
+
 
         ##################################################
         # Connections

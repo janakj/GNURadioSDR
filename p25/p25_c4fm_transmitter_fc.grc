@@ -312,7 +312,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(527, 410)</value>
+      <value>(527, 409)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -453,7 +453,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(491, 308)</value>
+      <value>(493, 300)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -478,6 +478,10 @@
     <param>
       <key>output_rate</key>
       <value>if_rate</value>
+    </param>
+    <param>
+      <key>gain</key>
+      <value>6.0</value>
     </param>
   </block>
   <block>

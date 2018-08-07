@@ -37,7 +37,7 @@ import numpy as np
 
 
 SYMBOL_RATE = 4800
-IF_RATE = 48000
+#IF_RATE = 48000
 
 
 # def fm_modulator_fc(rate=IF_RATE, max_deviation=12.5e3, c=1.0):
