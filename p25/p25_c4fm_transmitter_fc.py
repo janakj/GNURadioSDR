@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Transmitter
-# Generated: Sun Aug  5 13:38:15 2018
+# Generated: Tue Aug  7 10:50:24 2018
 ##################################################
 
 import os
@@ -37,7 +37,7 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
         # Variables
         ##################################################
 
-        self.taps = taps = firdes.low_pass(output_rate / 48000, output_rate, 3000, 2000, firdes.WIN_HAMMING, 6.76)
+        self.taps = taps = firdes.low_pass(output_rate / 48000, output_rate, 6250, 100, firdes.WIN_HANN, 6.76)
 
 
         ##################################################
@@ -54,12 +54,12 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
             output_rate=48000,
         )
         self.op25_vocoder_0 = op25_repeater.vocoder(True, False, 0, "", 0, False)
-        self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_fff(output_rate / 48000, (taps))
+        self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccf(output_rate / 48000, (taps))
         self.interp_fir_filter_xxx_0.declare_sample_delay(0)
         self.fm_mod = p25_fm_modulator_fc(
             factor=1.0,
             max_deviation=2.5e3,
-            samp_rate=output_rate,
+            samp_rate=48000,
         )
         self.float_to_short = blocks.float_to_short(1, 32768)
 
@@ -69,10 +69,10 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
         # Connections
         ##################################################
         self.connect((self.float_to_short, 0), (self.op25_vocoder_0, 0))
-        self.connect((self.fm_mod, 0), (self, 0))
-        self.connect((self.interp_fir_filter_xxx_0, 0), (self.fm_mod, 0))
+        self.connect((self.fm_mod, 0), (self.interp_fir_filter_xxx_0, 0))
+        self.connect((self.interp_fir_filter_xxx_0, 0), (self, 0))
         self.connect((self.op25_vocoder_0, 0), (self.symbol_mapper, 0))
-        self.connect((self.p25_c4fm_modulator_ff_0, 0), (self.interp_fir_filter_xxx_0, 0))
+        self.connect((self.p25_c4fm_modulator_ff_0, 0), (self.fm_mod, 0))
         self.connect((self, 0), (self.float_to_short, 0))
         self.connect((self.symbol_mapper, 0), (self.p25_c4fm_modulator_ff_0, 0))
 
@@ -81,7 +81,6 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
 
     def set_output_rate(self, output_rate):
         self.output_rate = output_rate
-        self.fm_mod.set_samp_rate(self.output_rate)
 
     def get_taps(self):
         return self.taps

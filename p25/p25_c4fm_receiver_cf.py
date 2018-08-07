@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Receiver
-# Generated: Sun Aug  5 13:38:12 2018
+# Generated: Tue Aug  7 00:35:14 2018
 ##################################################
 
 import os
@@ -51,14 +51,14 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
         )
         self.p25_fm_demodulator_cf_0 = p25_fm_demodulator_cf(
             max_deviation=2500,
-            samp_rate=input_rate,
+            samp_rate=48000,
         )
         self.p25_c4fm_demodulator_ff_0 = p25_c4fm_demodulator_ff(
             input_rate=48000,
             output_rate=4800,
         )
         self.op25_frame_assembler_0 = op25_repeater.p25_frame_assembler("127.0.01", 0, True, True, True, False, gr.msg_queue(1), True, False)
-        self.cutoff = filter.fir_filter_fff(input_rate // 48000, (filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HAMMING)))
+        self.cutoff = filter.fir_filter_ccf(input_rate // 48000, (filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HANN)))
         self.cutoff.declare_sample_delay(0)
         self.baseband_amp = blocks.multiply_const_vff((6.0, ))
 
@@ -68,12 +68,12 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
         # Connections
         ##################################################
         self.connect((self.baseband_amp, 0), (self.p25_c4fm_demodulator_ff_0, 0))
-        self.connect((self.cutoff, 0), (self.baseband_amp, 0))
+        self.connect((self.cutoff, 0), (self.p25_fm_demodulator_cf_0, 0))
         self.connect((self.op25_frame_assembler_0, 0), (self.short_to_float, 0))
         self.connect((self.p25_c4fm_demodulator_ff_0, 0), (self.p25_symbol_mapper_fb_0, 0))
-        self.connect((self.p25_fm_demodulator_cf_0, 0), (self.cutoff, 0))
+        self.connect((self.p25_fm_demodulator_cf_0, 0), (self.baseband_amp, 0))
         self.connect((self.p25_symbol_mapper_fb_0, 0), (self.op25_frame_assembler_0, 0))
-        self.connect((self, 0), (self.p25_fm_demodulator_cf_0, 0))
+        self.connect((self, 0), (self.cutoff, 0))
         self.connect((self.short_to_float, 0), (self, 0))
 
     def get_input_rate(self):
@@ -81,8 +81,7 @@ class p25_c4fm_receiver_cf(gr.hier_block2):
 
     def set_input_rate(self, input_rate):
         self.input_rate = input_rate
-        self.p25_fm_demodulator_cf_0.set_samp_rate(self.input_rate)
-        self.cutoff.set_taps((filter.firdes.low_pass(1.0, self.input_rate, 3000, 300, filter.firdes.WIN_HAMMING)))
+        self.cutoff.set_taps((filter.firdes.low_pass(1.0, self.input_rate, 3000, 300, filter.firdes.WIN_HANN)))
 
     def get_fa(self):
         return self.fa

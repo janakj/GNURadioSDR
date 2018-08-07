@@ -218,7 +218,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(850, 163)</value>
+      <value>(645, 163)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -242,11 +242,11 @@
     </param>
     <param>
       <key>taps</key>
-      <value>filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HAMMING)</value>
+      <value>filter.firdes.low_pass(1.0, input_rate, 3000, 300, filter.firdes.WIN_HANN)</value>
     </param>
     <param>
       <key>type</key>
-      <value>fff</value>
+      <value>ccf</value>
     </param>
   </block>
   <block>
@@ -433,7 +433,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(627, 163)</value>
+      <value>(860, 163)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -457,7 +457,7 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>input_rate</value>
+      <value>48000</value>
     </param>
   </block>
   <block>
@@ -656,7 +656,7 @@
   </connection>
   <connection>
     <source_block_id>cutoff</source_block_id>
-    <sink_block_id>baseband_amp</sink_block_id>
+    <sink_block_id>p25_fm_demodulator_cf_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -674,7 +674,7 @@
   </connection>
   <connection>
     <source_block_id>p25_fm_demodulator_cf_0</source_block_id>
-    <sink_block_id>cutoff</sink_block_id>
+    <sink_block_id>baseband_amp</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -686,7 +686,7 @@
   </connection>
   <connection>
     <source_block_id>pad_source_0</source_block_id>
-    <sink_block_id>p25_fm_demodulator_cf_0</sink_block_id>
+    <sink_block_id>cutoff</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

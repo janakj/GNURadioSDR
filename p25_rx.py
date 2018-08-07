@@ -39,7 +39,7 @@ class p25_rx(gr.top_block):
         rtl.set_bandwidth(0)
 
         receiver = p25.c4fm_receiver_cf(RTL_SAMPLE_RATE)
-        audio_sink = audio.sink(8000, '', True)
+        audio_sink = audio.sink(8000)
 
         self.connect(rtl, receiver, audio_sink)
 
