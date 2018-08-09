@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.12'?>
+<?grc format='1' created='3.7.13'?>
 <flow_graph>
   <timestamp>Thu Aug  2 21:06:20 2018</timestamp>
   <block>
@@ -133,7 +133,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>6.0</value>
+      <value>1.0</value>
     </param>
   </block>
   <block>
@@ -234,7 +234,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(540, 188)</value>
+      <value>(540, 186)</value>
     </param>
     <param>
       <key>_rotation</key>

@@ -19,7 +19,7 @@
   <param>
     <name>Sample Rate</name>
     <key>samp_rate</key>
-    <value>8000</value>
+    <value>48000</value>
     <type>raw</type>
     <hide>none</hide>
   </param>

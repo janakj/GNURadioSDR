@@ -2,7 +2,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: C4FM Transmitter
-# Generated: Tue Aug  7 14:18:53 2018
+# Generated: Thu Aug  9 00:31:13 2018
 ##################################################
 
 import os
@@ -21,11 +21,11 @@ import op25_repeater
 
 class p25_c4fm_transmitter_fc(gr.hier_block2):
 
-    def __init__(self, output_rate=48000 * 150):
+    def __init__(self, output_rate=48000):
         gr.hier_block2.__init__(
             self, "C4FM Transmitter",
             gr.io_signature(1, 1, gr.sizeof_float*1),
-            gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
+            gr.io_signaturev(3, 3, [gr.sizeof_gr_complex*1, gr.sizeof_float*1, gr.sizeof_char*1]),
         )
 
         ##################################################
@@ -38,7 +38,7 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
         ##################################################
         self.if_rate = if_rate = 48000
 
-        self.taps = taps = firdes.low_pass(output_rate // if_rate, output_rate, 6250, 100, firdes.WIN_HANN, 6.76)
+        self.taps = taps = firdes.low_pass(output_rate / if_rate, output_rate, 12500 / 2, 100, firdes.WIN_HANN, 6.76)
 
 
         ##################################################
@@ -51,15 +51,15 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
             symbol11=-1.0,
         )
         self.p25_c4fm_modulator_ff_0 = p25_c4fm_modulator_ff(
+            gain=6.0,
             input_rate=4800,
             output_rate=if_rate,
-            gain=6.0,
         )
         self.op25_vocoder_0 = op25_repeater.vocoder(True, False, 0, "", 0, False)
-        self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccf(output_rate // if_rate, (taps))
+        self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccf(output_rate / if_rate, (taps))
         self.interp_fir_filter_xxx_0.declare_sample_delay(0)
         self.fm_mod = p25_fm_modulator_fc(
-            factor=1.0,
+            factor=1,
             max_deviation=2.5e3,
             samp_rate=if_rate,
         )
@@ -73,8 +73,10 @@ class p25_c4fm_transmitter_fc(gr.hier_block2):
         self.connect((self.float_to_short, 0), (self.op25_vocoder_0, 0))
         self.connect((self.fm_mod, 0), (self.interp_fir_filter_xxx_0, 0))
         self.connect((self.interp_fir_filter_xxx_0, 0), (self, 0))
+        self.connect((self.op25_vocoder_0, 0), (self, 2))
         self.connect((self.op25_vocoder_0, 0), (self.symbol_mapper, 0))
         self.connect((self.p25_c4fm_modulator_ff_0, 0), (self.fm_mod, 0))
+        self.connect((self.p25_c4fm_modulator_ff_0, 0), (self, 1))
         self.connect((self, 0), (self.float_to_short, 0))
         self.connect((self.symbol_mapper, 0), (self.p25_c4fm_modulator_ff_0, 0))
 

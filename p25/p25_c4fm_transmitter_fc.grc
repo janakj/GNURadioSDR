@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.12'?>
+<?grc format='1' created='3.7.13'?>
 <flow_graph>
   <timestamp>Thu Aug  2 21:46:13 2018</timestamp>
   <block>
@@ -101,7 +101,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(592, 2)</value>
+      <value>(593, 3)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -128,7 +128,7 @@
     </param>
     <param>
       <key>cutoff_freq</key>
-      <value>6250</value>
+      <value>12500 / 2</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -144,7 +144,7 @@
     </param>
     <param>
       <key>gain</key>
-      <value>output_rate // if_rate</value>
+      <value>output_rate / if_rate</value>
     </param>
     <param>
       <key>id</key>
@@ -230,11 +230,11 @@
     </param>
     <param>
       <key>factor</key>
-      <value>1.0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(676, 300)</value>
+      <value>(652, 391)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -277,7 +277,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(501, 3)</value>
+      <value>(498, 4)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -312,7 +312,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(527, 409)</value>
+      <value>(630, 530)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -324,7 +324,7 @@
     </param>
     <param>
       <key>interp</key>
-      <value>output_rate // if_rate</value>
+      <value>output_rate / if_rate</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -367,7 +367,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(704, 208)</value>
+      <value>(700, 208)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -402,7 +402,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(203, 8)</value>
+      <value>(202, 6)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -430,7 +430,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>48000 * 150</value>
+      <value>48000</value>
     </param>
   </block>
   <block>
@@ -453,7 +453,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(493, 300)</value>
+      <value>(479, 311)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -496,7 +496,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(805, 418)</value>
+      <value>(921, 538)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -521,6 +521,92 @@
     <param>
       <key>optional</key>
       <value>False</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_sink</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(920, 327)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>pad_sink_1</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>c4fm</value>
+    </param>
+    <param>
+      <key>num_streams</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>optional</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_sink</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(864, 83)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>pad_sink_3</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>byte</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>symbols</value>
+    </param>
+    <param>
+      <key>num_streams</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>optional</key>
+      <value>True</value>
     </param>
     <param>
       <key>vlen</key>
@@ -645,6 +731,12 @@
   </connection>
   <connection>
     <source_block_id>op25_vocoder_0</source_block_id>
+    <sink_block_id>pad_sink_3</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>op25_vocoder_0</source_block_id>
     <sink_block_id>symbol_mapper</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -652,6 +744,12 @@
   <connection>
     <source_block_id>p25_c4fm_modulator_ff_0</source_block_id>
     <sink_block_id>fm_mod</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>p25_c4fm_modulator_ff_0</source_block_id>
+    <sink_block_id>pad_sink_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

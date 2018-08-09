@@ -10,7 +10,7 @@
   <param>
     <name>Input Rate</name>
     <key>input_rate</key>
-    <value>8000 * 120</value>
+    <value>48000</value>
     <type>raw</type>
     <hide>none</hide>
   </param>
@@ -23,6 +23,18 @@
     <name>out</name>
     <type>float</type>
     <vlen>1</vlen>
+  </source>
+  <source>
+    <name>c4fm</name>
+    <type>float</type>
+    <vlen>1</vlen>
+    <optional>1</optional>
+  </source>
+  <source>
+    <name>symbols</name>
+    <type>byte</type>
+    <vlen>1</vlen>
+    <optional>1</optional>
   </source>
   <doc>/home/janakj/.grc_gnuradio/p25_c4fm_receiver_cf.py</doc>
   <grc_source>/media/sf_janakj/sdr/GNURadioSDR/p25/p25_c4fm_receiver_cf.grc</grc_source>
